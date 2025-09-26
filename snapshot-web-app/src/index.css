@@ -1,0 +1,159 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Cyberpunk Dark Theme */
+    --background: 218 27% 4%;
+    --foreground: 120 100% 50%;
+
+    --card: 220 24% 8%;
+    --card-foreground: 0 0% 95%;
+
+    --popover: 220 24% 8%;
+    --popover-foreground: 0 0% 95%;
+
+    --primary: 120 100% 50%;
+    --primary-foreground: 218 27% 4%;
+
+    --secondary: 220 24% 12%;
+    --secondary-foreground: 120 100% 80%;
+
+    --muted: 220 24% 10%;
+    --muted-foreground: 0 0% 60%;
+
+    --accent: 120 100% 50%;
+    --accent-foreground: 218 27% 4%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 220 24% 15%;
+    --input: 220 24% 12%;
+    --ring: 120 100% 50%;
+
+    --radius: 0.75rem;
+
+    /* Custom cyberpunk colors */
+    --cyber-green: 120 100% 50%;
+    --cyber-green-bright: 120 100% 60%;
+    --cyber-green-dim: 120 80% 40%;
+    --cyber-bg-primary: 218 27% 4%;
+    --cyber-bg-secondary: 220 24% 8%;
+    --cyber-bg-tertiary: 220 24% 12%;
+    --cyber-text-primary: 0 0% 95%;
+    --cyber-text-secondary: 0 0% 80%;
+    --cyber-text-muted: 0 0% 60%;
+
+    /* Gradients */
+    --gradient-cyber: linear-gradient(135deg, hsl(120 100% 50% / 0.1), hsl(120 100% 50% / 0.02));
+    --gradient-glow: radial-gradient(circle at center, hsl(120 100% 50% / 0.3), transparent 70%);
+
+    /* Shadows */
+    --shadow-cyber: 0 0 20px hsl(120 100% 50% / 0.3);
+    --shadow-glow: 0 0 40px hsl(120 100% 50% / 0.2);
+
+    --sidebar-background: 220 24% 8%;
+    --sidebar-foreground: 0 0% 95%;
+    --sidebar-primary: 120 100% 50%;
+    --sidebar-primary-foreground: 218 27% 4%;
+    --sidebar-accent: 220 24% 12%;
+    --sidebar-accent-foreground: 0 0% 95%;
+    --sidebar-border: 220 24% 15%;
+    --sidebar-ring: 120 100% 50%;
+  }
+
+  .dark {
+    --background: 218 27% 4%;
+    --foreground: 120 100% 50%;
+
+    --card: 220 24% 8%;
+    --card-foreground: 0 0% 95%;
+
+    --popover: 220 24% 8%;
+    --popover-foreground: 0 0% 95%;
+
+    --primary: 120 100% 50%;
+    --primary-foreground: 218 27% 4%;
+
+    --secondary: 220 24% 12%;
+    --secondary-foreground: 120 100% 80%;
+
+    --muted: 220 24% 10%;
+    --muted-foreground: 0 0% 60%;
+
+    --accent: 120 100% 50%;
+    --accent-foreground: 218 27% 4%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 220 24% 15%;
+    --input: 220 24% 12%;
+    --ring: 120 100% 50%;
+
+    --sidebar-background: 220 24% 8%;
+    --sidebar-foreground: 0 0% 95%;
+    --sidebar-primary: 120 100% 50%;
+    --sidebar-primary-foreground: 218 27% 4%;
+    --sidebar-accent: 220 24% 12%;
+    --sidebar-accent-foreground: 0 0% 95%;
+    --sidebar-border: 220 24% 15%;
+    --sidebar-ring: 120 100% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-mono;
+    background-image: 
+      radial-gradient(circle at 20% 80%, hsl(120 100% 50% / 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, hsl(120 100% 50% / 0.05) 0%, transparent 50%);
+  }
+
+  .cyber-glow {
+    text-shadow: 0 0 10px hsl(var(--cyber-green));
+  }
+
+  .cyber-border {
+    border: 1px solid hsl(var(--cyber-green) / 0.3);
+    box-shadow: 0 0 10px hsl(var(--cyber-green) / 0.1);
+  }
+
+  .cyber-card {
+    background: hsl(var(--cyber-bg-secondary) / 0.8);
+    border: 1px solid hsl(var(--cyber-green) / 0.2);
+    box-shadow: 0 0 15px hsl(var(--cyber-green) / 0.1);
+    backdrop-filter: blur(10px);
+  }
+
+  .terminal-text {
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    color: hsl(var(--cyber-green));
+    text-shadow: 0 0 5px hsl(var(--cyber-green) / 0.5);
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% {
+      opacity: 1;
+      box-shadow: 0 0 15px hsl(var(--cyber-green) / 0.3);
+    }
+    50% {
+      opacity: .8;
+      box-shadow: 0 0 25px hsl(var(--cyber-green) / 0.5);
+    }
+  }
+}
