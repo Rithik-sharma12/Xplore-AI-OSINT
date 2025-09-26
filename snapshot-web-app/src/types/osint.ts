@@ -1,4 +1,4 @@
-export type OSINTInputType = 'url' | 'username' | 'ip' | 'mac' | 'email' | 'phone' | 'domain' | 'subdomain' | 'hash';
+export type OSINTInputType = 'url' | 'username' | 'ip' | 'mac' | 'email' | 'phone' | 'domain' | 'subdomain' | 'hash' | 'social-media';
 
 export interface OSINTInput {
   type: OSINTInputType;
@@ -84,14 +84,31 @@ export interface OSINTAnalysisResult {
       followers?: number;
       posts?: number;
       lastActivity?: string;
+      category?: string;
+      confidence?: number;
       profileData?: {
         name?: string;
         bio?: string;
         location?: string;
         website?: string;
         joinDate?: string;
+        avatar?: string;
+      };
+      metadata?: {
+        responseTime?: number;
+        sslEnabled?: boolean;
+        statusCode?: number;
+        contentLength?: number;
       };
     }>;
+    summary?: {
+      totalPlatforms: number;
+      verifiedAccounts: number;
+      categoriesFound: string[];
+      averageConfidence: number;
+      searchTime: number;
+      totalChecked: number;
+    };
     connections: Array<{
       platform: string;
       mutualConnections: number;
@@ -102,6 +119,19 @@ export interface OSINTAnalysisResult {
       sources: string[];
       positiveReviews: number;
       negativeReviews: number;
+      digitalFootprint?: {
+        totalAccounts: number;
+        publicProfiles: number;
+        professionalAccounts: number;
+        socialAccounts: number;
+        creativePlatforms: number;
+      };
+    };
+    riskAssessment?: {
+      privacyScore: number;
+      exposureLevel: 'Low' | 'Medium' | 'High';
+      sensitiveDataExposed: boolean;
+      recommendations: string[];
     };
   };
 

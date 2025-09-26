@@ -69,6 +69,9 @@ class OSINTAnalyzer {
       case 'username':
         await this.analyzeUsername(input, result);
         break;
+      case 'social-media':
+        await this.analyzeSocialMediaSherlock(input, result);
+        break;
       case 'phone':
         await this.analyzePhone(input, result);
         break;
@@ -150,6 +153,17 @@ class OSINTAnalyzer {
           ? { isValid: true }
           : { isValid: false, error: 'Invalid hash format' };
       
+      case 'username':
+      case 'social-media':
+        const usernameRegex = /^[a-zA-Z0-9._-]{1,30}$/;
+        return usernameRegex.test(value)
+          ? { isValid: true }
+          : { 
+              isValid: false, 
+              error: 'Invalid username format',
+              suggestions: ['Username should be 1-30 characters', 'Only letters, numbers, dots, underscores, and hyphens allowed']
+            };
+      
       default:
         return { isValid: true };
     }
@@ -165,6 +179,7 @@ class OSINTAnalyzer {
       phone: 'Phone number with country code',
       mac: 'MAC address (XX:XX:XX:XX:XX:XX)',
       hash: 'Cryptographic hash (MD5, SHA1, SHA256, etc.)',
+      'social-media': 'Username for comprehensive social media enumeration',
       username: 'Username or handle'
     };
     return descriptions[type] || 'Standard format';
@@ -437,6 +452,168 @@ class OSINTAnalyzer {
         negativeReviews: Math.floor(Math.random() * 5)
       }
     };
+  }
+
+  private async analyzeSocialMediaSherlock(input: OSINTInput, result: OSINTAnalysisResult): Promise<void> {
+    // Simulate comprehensive social media enumeration using Sherlock-style data
+    const sherlockSites = this.getSherlockSiteData();
+    const username = input.value;
+    const foundPlatforms: any[] = [];
+    
+    // Simulate checking each platform (in real implementation, this would call actual APIs)
+    for (const site of sherlockSites) {
+      // Simulate success rate based on platform popularity
+      const found = Math.random() > site.rarity;
+      
+      if (found) {
+        foundPlatforms.push({
+          platform: site.name,
+          username: username,
+          url: site.url.replace('{}', username),
+          verified: Math.random() > 0.8,
+          followers: site.hasFollowers ? Math.floor(Math.random() * 10000) : undefined,
+          posts: site.hasPosts ? Math.floor(Math.random() * 5000) : undefined,
+          lastActivity: this.getRandomDate(),
+          category: site.category,
+          confidence: Math.floor(Math.random() * 40) + 60,
+          profileData: {
+            name: Math.random() > 0.5 ? `${username} ${site.category}` : username,
+            bio: site.sampleBio || `User on ${site.name}`,
+            location: this.getRandomLocation(),
+            joinDate: this.getRandomDate(),
+            avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${username}`
+          },
+          metadata: {
+            responseTime: Math.floor(Math.random() * 2000) + 100,
+            sslEnabled: Math.random() > 0.1,
+            statusCode: 200,
+            contentLength: Math.floor(Math.random() * 50000) + 1000
+          }
+        });
+      }
+    }
+
+    result.socialIntelligence = {
+      platforms: foundPlatforms,
+      summary: {
+        totalPlatforms: foundPlatforms.length,
+        verifiedAccounts: foundPlatforms.filter(p => p.verified).length,
+        categoriesFound: [...new Set(foundPlatforms.map(p => p.category))],
+        averageConfidence: foundPlatforms.length > 0 
+          ? Math.floor(foundPlatforms.reduce((sum, p) => sum + p.confidence, 0) / foundPlatforms.length)
+          : 0,
+        searchTime: Math.floor(Math.random() * 5000) + 2000,
+        totalChecked: sherlockSites.length
+      },
+      connections: this.generateConnections(foundPlatforms),
+      reputation: {
+        score: foundPlatforms.length > 0 ? Math.floor(Math.random() * 40) + 60 : 30,
+        sources: foundPlatforms.map(p => p.platform).slice(0, 5),
+        positiveReviews: Math.floor(Math.random() * 20),
+        negativeReviews: Math.floor(Math.random() * 5),
+        digitalFootprint: this.calculateDigitalFootprint(foundPlatforms)
+      },
+      riskAssessment: {
+        privacyScore: Math.floor(Math.random() * 100),
+        exposureLevel: foundPlatforms.length > 10 ? 'High' : foundPlatforms.length > 5 ? 'Medium' : 'Low',
+        sensitiveDataExposed: Math.random() > 0.7,
+        recommendations: this.generatePrivacyRecommendations(foundPlatforms)
+      }
+    };
+
+    // Add specific findings to AI summary
+    result.aiSummary.keyFindings.push(
+      `Found ${foundPlatforms.length} social media accounts across ${sherlockSites.length} platforms`,
+      `Digital footprint spans ${[...new Set(foundPlatforms.map(p => p.category))].length} different categories`,
+      `Average account confidence: ${result.socialIntelligence.summary.averageConfidence}%`
+    );
+
+    if (foundPlatforms.length > 10) {
+      result.aiSummary.keyFindings.push('⚠️ High digital exposure detected - consider privacy review');
+    }
+  }
+
+  private getSherlockSiteData() {
+    // This simulates the Sherlock data.json structure with popular platforms
+    return [
+      { name: 'Twitter', url: 'https://twitter.com/{}', category: 'Social Media', rarity: 0.3, hasFollowers: true, hasPosts: true, sampleBio: 'Tech enthusiast and thought leader' },
+      { name: 'Instagram', url: 'https://instagram.com/{}', category: 'Social Media', rarity: 0.4, hasFollowers: true, hasPosts: true, sampleBio: 'Sharing life moments' },
+      { name: 'GitHub', url: 'https://github.com/{}', category: 'Development', rarity: 0.6, hasFollowers: true, hasPosts: false, sampleBio: 'Software developer and open source contributor' },
+      { name: 'LinkedIn', url: 'https://linkedin.com/in/{}', category: 'Professional', rarity: 0.5, hasFollowers: true, hasPosts: false, sampleBio: 'Professional network profile' },
+      { name: 'Reddit', url: 'https://reddit.com/user/{}', category: 'Forum', rarity: 0.4, hasFollowers: false, hasPosts: true, sampleBio: 'Active community member' },
+      { name: 'YouTube', url: 'https://youtube.com/@{}', category: 'Video', rarity: 0.7, hasFollowers: true, hasPosts: true, sampleBio: 'Content creator' },
+      { name: 'TikTok', url: 'https://tiktok.com/@{}', category: 'Social Media', rarity: 0.6, hasFollowers: true, hasPosts: true, sampleBio: 'Creative content and trends' },
+      { name: 'Facebook', url: 'https://facebook.com/{}', category: 'Social Media', rarity: 0.5, hasFollowers: true, hasPosts: true, sampleBio: 'Connecting with friends and family' },
+      { name: 'Discord', url: 'https://discord.com/users/{}', category: 'Gaming', rarity: 0.8, hasFollowers: false, hasPosts: false, sampleBio: 'Gaming and community discussions' },
+      { name: 'Twitch', url: 'https://twitch.tv/{}', category: 'Gaming', rarity: 0.8, hasFollowers: true, hasPosts: false, sampleBio: 'Live streaming enthusiast' },
+      { name: 'Medium', url: 'https://medium.com/@{}', category: 'Writing', rarity: 0.7, hasFollowers: true, hasPosts: true, sampleBio: 'Writer and thought leader' },
+      { name: 'Pinterest', url: 'https://pinterest.com/{}', category: 'Creative', rarity: 0.6, hasFollowers: true, hasPosts: true, sampleBio: 'Creative inspiration and ideas' },
+      { name: 'Snapchat', url: 'https://snapchat.com/add/{}', category: 'Social Media', rarity: 0.7, hasFollowers: false, hasPosts: false, sampleBio: 'Quick moments and stories' },
+      { name: 'Telegram', url: 'https://t.me/{}', category: 'Messaging', rarity: 0.8, hasFollowers: false, hasPosts: false, sampleBio: 'Secure messaging' },
+      { name: 'WhatsApp', url: 'https://wa.me/{}', category: 'Messaging', rarity: 0.9, hasFollowers: false, hasPosts: false, sampleBio: 'Personal messaging' }
+    ];
+  }
+
+  private generateConnections(platforms: any[]) {
+    const connections = [];
+    for (let i = 0; i < Math.min(3, platforms.length); i++) {
+      connections.push({
+        platform: platforms[i].platform,
+        mutualConnections: Math.floor(Math.random() * 50),
+        commonInterests: this.getRandomFromArray([
+          ['Technology', 'Programming', 'AI'],
+          ['Gaming', 'Streaming', 'Entertainment'],
+          ['Business', 'Networking', 'Startups'],
+          ['Art', 'Design', 'Creative'],
+          ['Sports', 'Fitness', 'Health']
+        ])
+      });
+    }
+    return connections;
+  }
+
+  private calculateDigitalFootprint(platforms: any[]) {
+    return {
+      totalAccounts: platforms.length,
+      publicProfiles: platforms.filter(p => p.category !== 'Messaging').length,
+      professionalAccounts: platforms.filter(p => p.category === 'Professional').length,
+      socialAccounts: platforms.filter(p => p.category === 'Social Media').length,
+      creativePlatforms: platforms.filter(p => p.category === 'Creative' || p.category === 'Video').length
+    };
+  }
+
+  private generatePrivacyRecommendations(platforms: any[]) {
+    const recommendations = [
+      'Review privacy settings on all discovered accounts',
+      'Enable two-factor authentication where available',
+      'Regularly audit your digital presence'
+    ];
+
+    if (platforms.length > 10) {
+      recommendations.push('Consider consolidating or removing unused accounts');
+    }
+
+    if (platforms.some(p => p.category === 'Professional')) {
+      recommendations.push('Maintain professional consistency across work-related platforms');
+    }
+
+    return recommendations;
+  }
+
+  private getRandomDate(): string {
+    const start = new Date(2020, 0, 1);
+    const end = new Date();
+    const randomDate = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+    return randomDate.toISOString().split('T')[0];
+  }
+
+  private getRandomLocation(): string {
+    const locations = [
+      'San Francisco, CA', 'New York, NY', 'London, UK', 'Berlin, Germany',
+      'Tokyo, Japan', 'Sydney, Australia', 'Toronto, Canada', 'Remote',
+      'Los Angeles, CA', 'Seattle, WA', 'Amsterdam, Netherlands'
+    ];
+    return this.getRandomFromArray(locations);
   }
 
   private async analyzePhone(input: OSINTInput, result: OSINTAnalysisResult): Promise<void> {

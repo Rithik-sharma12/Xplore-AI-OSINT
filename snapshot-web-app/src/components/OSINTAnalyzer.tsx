@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Search, Loader2, Shield, Globe, User, Mail, Phone, Wifi, Hash, Network } from "lucide-react";
+import { Search, Loader2, Shield, Globe, User, Mail, Phone, Wifi, Hash, Network, Users } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { OSINTInput, OSINTInputType } from "@/types/osint";
 
@@ -20,6 +20,7 @@ const INPUT_TYPES = [
   { value: 'ip', label: 'IP Address', icon: Shield, description: 'IP address reconnaissance', examples: ['8.8.8.8', '192.168.1.1'] },
   { value: 'email', label: 'Email', icon: Mail, description: 'Email address investigation', examples: ['user@example.com', 'admin@domain.org'] },
   { value: 'username', label: 'Username', icon: User, description: 'Social media username lookup', examples: ['johndoe', 'tech_user'] },
+  { value: 'social-media', label: 'Social Media Hunter', icon: Users, description: 'Comprehensive social media enumeration using Sherlock', examples: ['johndoe', 'elonmusk', 'techguru'] },
   { value: 'phone', label: 'Phone Number', icon: Phone, description: 'Phone number investigation', examples: ['+1-555-123-4567', '(555) 123-4567'] },
   { value: 'mac', label: 'MAC Address', icon: Wifi, description: 'MAC address lookup', examples: ['00:1B:44:11:3A:B7', 'AA-BB-CC-DD-EE-FF'] },
   { value: 'hash', label: 'Hash', icon: Hash, description: 'File hash analysis', examples: ['5d41402abc4b2a76b9719d911017c592', 'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3'] }

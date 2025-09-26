@@ -29,6 +29,7 @@ import {
 import { OSINTAnalysisResult, OSINTInputType } from "@/types/osint";
 import { URLAnalysisResults } from "./URLAnalysisResults";
 import { SubdomainAnalysisResults } from "./SubdomainAnalysisResults";
+import { SocialMediaResults } from "./SocialMediaResults";
 
 interface OSINTResultsProps {
   result: OSINTAnalysisResult;
@@ -42,6 +43,7 @@ const getIconForInputType = (type: OSINTInputType) => {
     ip: Server,
     email: Mail,
     username: User,
+    'social-media': Users,
     phone: Phone,
     mac: Wifi,
     hash: Hash
@@ -82,6 +84,10 @@ export const OSINTResults = ({ result }: OSINTResultsProps) => {
   
   if (result.input.type === 'subdomain') {
     return <SubdomainAnalysisResults result={result} />;
+  }
+
+  if (result.input.type === 'social-media') {
+    return <SocialMediaResults result={result} />;
   }
 
   return (
